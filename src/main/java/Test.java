@@ -77,7 +77,7 @@ public class Test {
                 clusterer.setMinClusterSize(5);
                 clusterer.setRepulsion(1.5);
                 clusterer.buildClusterer(instances);
-                return clusterer.clusterAssignments.toString());
+                return clusterer.clusterAssignments.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
