@@ -153,7 +153,7 @@ public class CLOPEClusterer implements Clusterer {
         } while (moved);
     }
 
-    public HashMap<Long, Long> buildClusterer(List<Instance> data) throws Exception {
+    public HashMap<Long, List<Long>> buildClusterer(List<Instance> data) throws Exception {
         clusters.clear();
         clusterAssignments.clear();
 
@@ -177,6 +177,16 @@ public class CLOPEClusterer implements Clusterer {
             }
         }
 
-        return clusterAssignments;
+        HashMap<Long, List<Long>> result = new HashMap<Long, List<Long>>();
+        for (Map.Entry<Long, Long> entry : clusterAssignments.entrySet()) {
+            if (result.containsKey(entry.getValue())) {
+                result.get(entry.getValue()).add(entry.getKey());
+            } else {
+                List<Long> tmp = new ArrayList<Long>();
+                tmp.add(entry.getKey());
+                result.put(entry.getValue(), tmp);
+            }
+        }
+        return result;
     }
 }

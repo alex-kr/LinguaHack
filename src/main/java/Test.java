@@ -34,14 +34,15 @@ public class Test {
             }
             System.out.println(instances);
             CLOPEClusterer clusterer = new CLOPEClusterer();
+            HashMap<Long,List<Long>> result = null;
             try {
                 clusterer.setMinClusterSize(5);
                 clusterer.setRepulsion(1.5);
-                clusterer.buildClusterer(instances);
+                result = clusterer.buildClusterer(instances);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                return clusterer.clusterAssignments.toString();
+                return result.toString();
             }
         }
 
