@@ -3,9 +3,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.*;
+
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Main extends HttpServlet {
   @Override
@@ -18,7 +20,9 @@ public class Main extends HttpServlet {
 
   private void showHome(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
-    String result = Test.testIt();
+    HashMap<Long, List<Long>> map = Test.testIt();
+    Gson gson = new Gson();
+    String result = gson.toJson(map);
     resp.getWriter().print(result);
   }
 

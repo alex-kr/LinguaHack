@@ -15,7 +15,7 @@ public class Test {
 
 
 
-    public static String testIt() {
+    public static HashMap<Long, List<Long>> testIt() {
         List<Instance> instances = new ArrayList<Instance>();
         List<Long> tmp= new ArrayList<Long>();  tmp.add(10L);
         System.out.println("Point 1");
@@ -42,7 +42,7 @@ public class Test {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                return result.toString();
+                return result;
             }
         }
 
