@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.*;
 
 import com.google.gson.Gson;
+import to.DataSetTo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,22 @@ public class Main extends HttpServlet {
       throws ServletException, IOException {
 
       showHome(req,resp);
+
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+          throws ServletException, IOException {
+    Gson gson = new Gson();
+    StringBuilder sb = new StringBuilder();
+    String s;
+    while ((s = req.getReader().readLine()) != null) {
+      sb.append(s);
+    }
+
+    DataSetTo dataTo = (DataSetTo) gson.fromJson(sb.toString(), DataSetTo.class);
+
+    resp.getWriter().print("Hello! Your object: " + dataTo.toString());
 
   }
 
