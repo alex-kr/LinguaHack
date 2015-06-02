@@ -16,7 +16,7 @@ public class Test {
 
 
     public static HashMap<Long, List<Long>> testIt() {
-        List<Instance> instances = new ArrayList<Instance>();
+        List<QualitativeInstance> instances = new ArrayList<QualitativeInstance>();
         List<Long> tmp= new ArrayList<Long>();  tmp.add(10L);
         System.out.println("Point 1");
 
