@@ -50,7 +50,30 @@ public class Main extends HttpServlet {
   private void showHome(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     resp.setContentType("application/json");
-    resp.getWriter().print("Hello!");
+    resp.getWriter().print("Hello! It's a CLOPE clustering app\n Input example:\n" +
+            "{\n" +
+            "  \"repulsion\": 2,\n" +
+            "  \"minSize\": 1,\n" +
+            "  \"data\": [\n" +
+            "    {\n" +
+            "      \"id\": 1,\n" +
+            "      \"items\": [5, 6]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 2,\n" +
+            "      \"items\": [7, 5, 38]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 17,\n" +
+            "      \"items\": [37, 53, 6,8]\n" +
+            "    },\n" +
+            "{\n" +
+            "      \"id\": 15,\n" +
+            "      \"items\": [37, 53, 6]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}" + "\n Output example: " +
+            "[{\"clusterId\":7,\"items\":[1]},{\"clusterId\":8,\"items\":[2]},{\"clusterId\":9,\"items\":[17,15]}]");
   }
 
 
