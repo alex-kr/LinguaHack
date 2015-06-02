@@ -3,11 +3,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import CLOPE.CLOPEClusterer;
-import core.Instance;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.*;
 
 import com.google.gson.Gson;
+import to.ClusterTO;
 import to.DataSetTo;
 
 import java.util.HashMap;
@@ -36,13 +36,13 @@ public class Main extends HttpServlet {
     CLOPEClusterer clusterer = new CLOPEClusterer();
     clusterer.setRepulsion(dataTo.getRepulsion());
     clusterer.setMinClusterSize(dataTo.getMinSize());
-    HashMap<Long, List<Long>> map = null;
+    List<ClusterTO> clusters = null;
     try {
-      map = clusterer.buildClusterer(dataTo.getData());
+      clusters = clusterer.buildClusterer(dataTo.getData());
     } catch (Exception e) {
       e.printStackTrace();
     }
-    String result = gson.toJson(map);
+    String result = gson.toJson(clusters);
     resp.getWriter().print(result);
 
   }
@@ -50,10 +50,7 @@ public class Main extends HttpServlet {
   private void showHome(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     resp.setContentType("application/json");
-    HashMap<Long, List<Long>> map = Test.testIt();
-    Gson gson = new Gson();
-    String result = gson.toJson(map);
-    resp.getWriter().print(result);
+    resp.getWriter().print("Hello!");
   }
 
 

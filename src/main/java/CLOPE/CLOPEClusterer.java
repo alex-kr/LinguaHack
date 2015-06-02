@@ -3,6 +3,7 @@ package CLOPE;
 import core.Clusterer;
 import core.Instance;
 import core.instances.QualitativeInstance;
+import to.ClusterTO;
 
 import java.util.*;
 import static utils.MapUtil.*;
@@ -154,7 +155,7 @@ public class CLOPEClusterer implements Clusterer {
         } while (moved);
     }
 
-    public HashMap<Long, List<Long>> buildClusterer(List<QualitativeInstance> data) throws Exception {
+    public List<ClusterTO> buildClusterer(List<QualitativeInstance> data) throws Exception {
         clusters.clear();
         clusterAssignments.clear();
 
@@ -178,6 +179,7 @@ public class CLOPEClusterer implements Clusterer {
             }
         }
 
+        List<ClusterTO> clustersTO = new ArrayList<ClusterTO>();
         HashMap<Long, List<Long>> result = new HashMap<Long, List<Long>>();
         for (Map.Entry<Long, Long> entry : clusterAssignments.entrySet()) {
             if (result.containsKey(entry.getValue())) {
@@ -188,6 +190,10 @@ public class CLOPEClusterer implements Clusterer {
                 result.put(entry.getValue(), tmp);
             }
         }
-        return result;
+        for (Map.Entry<Long,List<Long>> entry: result.entrySet()) {
+            clustersTO.add(new ClusterTO(entry.getKey(),entry.getValue()));
+        }
+
+        return clustersTO;
     }
 }
