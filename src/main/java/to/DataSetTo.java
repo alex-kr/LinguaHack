@@ -8,24 +8,24 @@ import java.util.List;
  * Created by pc on 02.06.2015.
  */
 public class DataSetTo {
-    Double repulsion;
-    Integer minSize;
+    double repulsion;
+    int minSize;
     List<QualitativeInstance> data;
 
 
-    public Double getRepulsion() {
+    public double getRepulsion() {
         return repulsion;
     }
 
-    public void setRepulsion(Double repulsion) {
+    public void setRepulsion(double repulsion) {
         this.repulsion = repulsion;
     }
 
-    public Integer getMinSize() {
+    public int getMinSize() {
         return minSize;
     }
 
-    public void setMinSize(Integer minSize) {
+    public void setMinSize(int minSize) {
         this.minSize = minSize;
     }
 
