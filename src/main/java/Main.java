@@ -59,7 +59,7 @@ public class Main extends HttpServlet {
 
   public static void main(String[] args) throws Exception {
     Server server = new Server(Integer.valueOf(System.getenv("PORT")));
-    ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+    ServletContextHandler context = new ServletContextHandler();
     context.setContextPath("/");
     server.setHandler(context);
     context.addServlet(new ServletHolder(new Main()),"/*");
