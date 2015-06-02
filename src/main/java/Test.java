@@ -3,6 +3,7 @@ import CLOPE.CLOPEClusterer;
 
 import core.Instance;
 import core.instances.QualitativeInstance;
+import to.ClusterTO;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class Test {
 
 
 
-    public static HashMap<Long, List<Long>> testIt() {
+    public static List<ClusterTO> testIt() {
         List<QualitativeInstance> instances = new ArrayList<QualitativeInstance>();
         List<Long> tmp= new ArrayList<Long>();  tmp.add(10L);
         System.out.println("Point 1");
@@ -34,7 +35,7 @@ public class Test {
             }
             System.out.println(instances);
             CLOPEClusterer clusterer = new CLOPEClusterer();
-            HashMap<Long,List<Long>> result = null;
+            List<ClusterTO> result = null;
             try {
                 clusterer.setMinClusterSize(5);
                 clusterer.setRepulsion(1.5);
