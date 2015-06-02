@@ -20,6 +20,7 @@ public class Main extends HttpServlet {
 
   private void showHome(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
+    resp.setContentType("application/json");
     HashMap<Long, List<Long>> map = Test.testIt();
     Gson gson = new Gson();
     String result = gson.toJson(map);
