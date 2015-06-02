@@ -42,6 +42,7 @@ public class Main extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    
     String result = gson.toJson(map);
     resp.getWriter().print(result);
 
