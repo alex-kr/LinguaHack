@@ -2,6 +2,7 @@ package CLOPE;
 
 import core.Cluster;
 import core.Instance;
+import core.instances.QualitativeInstance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class CLOPECluster implements Cluster, Comparable {
     /**
      * Cluster instances
      */
-    private List<Instance> instances = new ArrayList<Instance>();
+    private List<QualitativeInstance> instances = new ArrayList<QualitativeInstance>();
 
     /**
      * Hash of <item, occurrence> pairs
@@ -48,7 +49,7 @@ public class CLOPECluster implements Cluster, Comparable {
         return id;
     }
 
-    public List<Instance> getInstances(){
+    public List<QualitativeInstance> getInstances(){
         return instances;
     }
 
@@ -131,7 +132,7 @@ public class CLOPECluster implements Cluster, Comparable {
     /**
      * Calculate Delta
      */
-    public double getDeltaAdd(Instance inst, double r) {
+    public double getDeltaAdd(QualitativeInstance inst, double r) {
         int newS;
         int newW;
         double profit;
@@ -163,7 +164,7 @@ public class CLOPECluster implements Cluster, Comparable {
     /**
      * Add instance to cluster
      */
-    public void addInstance(Instance inst) throws NullPointerException{
+    public void addInstance(QualitativeInstance inst) throws NullPointerException{
         for (Long item: inst.getItems()) {
                 addItem(item);
         }
@@ -175,7 +176,7 @@ public class CLOPECluster implements Cluster, Comparable {
     /**
      * Delete instance from cluster
      */
-    public void deleteInstance(Instance inst) throws NullPointerException{
+    public void deleteInstance(QualitativeInstance inst) throws NullPointerException{
         for (Long item: inst.getItems()) {
             deleteItem(item);
         }

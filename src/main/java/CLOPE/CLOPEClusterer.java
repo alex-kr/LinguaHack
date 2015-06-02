@@ -2,6 +2,7 @@ package CLOPE;
 
 import core.Clusterer;
 import core.Instance;
+import core.instances.QualitativeInstance;
 
 import java.util.*;
 import static utils.MapUtil.*;
@@ -35,13 +36,13 @@ public class CLOPEClusterer implements Clusterer {
     }
 
 
-    private void addInstanceToBestCluster(Instance inst) {
+    private void addInstanceToBestCluster(QualitativeInstance inst) {
         if (!addInstanceToBestExistingClusterIfProfitable(inst)) {
             addInstanceToNewCluster(inst);
         }
     }
 
-    private void addInstanceToNewCluster(Instance inst) {
+    private void addInstanceToNewCluster(QualitativeInstance inst) {
         CLOPECluster newCluster = new CLOPECluster();
         clusters.put(newCluster.getId(), newCluster);
         newCluster.addInstance(inst);
@@ -52,7 +53,7 @@ public class CLOPEClusterer implements Clusterer {
     * returns false if deltaAdd in new cluster is higher
     *
     */
-    private boolean addInstanceToBestExistingClusterIfProfitable(Instance inst) {
+    private boolean addInstanceToBestExistingClusterIfProfitable(QualitativeInstance inst) {
         double delta;
         double deltaMax;
         Long clusterMaxId = null;
@@ -77,7 +78,7 @@ public class CLOPEClusterer implements Clusterer {
         return false;
     }
 
-    private void addInstanceToBestExistingCluster(Instance inst) {
+    private void addInstanceToBestExistingCluster(QualitativeInstance inst) {
         double delta;
         double deltaMax;
         Long clusterMaxId = clusters.firstKey();
@@ -101,7 +102,7 @@ public class CLOPEClusterer implements Clusterer {
     /**
      * Move instance to best cluster
      */
-    private boolean moveInstanceToBestCluster(Instance inst) {
+    private boolean moveInstanceToBestCluster(QualitativeInstance inst) {
         boolean moved = false;
         Long clusterId = clusterAssignments.get(inst.getId());
         //
@@ -141,11 +142,11 @@ public class CLOPEClusterer implements Clusterer {
 
     }
 
-    private void redistributeInstances(List<Instance> data) {
+    private void redistributeInstances(List<QualitativeInstance> data) {
         boolean moved;
         do {
             moved = false;
-            for (Instance inst: data) {
+            for (QualitativeInstance inst: data) {
                 if (moveInstanceToBestCluster(inst)) {
                     moved = true;
                 }
@@ -153,12 +154,12 @@ public class CLOPEClusterer implements Clusterer {
         } while (moved);
     }
 
-    public HashMap<Long, List<Long>> buildClusterer(List<Instance> data) throws Exception {
+    public HashMap<Long, List<Long>> buildClusterer(List<QualitativeInstance> data) throws Exception {
         clusters.clear();
         clusterAssignments.clear();
 
         //Phase 1
-        for (Instance inst: data) {
+        for (QualitativeInstance inst: data) {
             addInstanceToBestCluster(inst);
         }
         //Phase 2
@@ -169,9 +170,9 @@ public class CLOPEClusterer implements Clusterer {
         Map<Long, CLOPECluster> sortedClusters = sortByValues(clusters);
         for (CLOPECluster cluster: sortedClusters.values()) {
             if (cluster.getSize() < minClusterSize) {
-                List<Instance> instancesToMove = cluster.getInstances();
+                List<QualitativeInstance> instancesToMove = cluster.getInstances();
                 clusters.remove(cluster.getId());
-                for (Instance inst: instancesToMove) {
+                for (QualitativeInstance inst: instancesToMove) {
                     addInstanceToBestExistingCluster(inst);
                 }
             }
