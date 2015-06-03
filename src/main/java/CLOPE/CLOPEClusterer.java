@@ -170,7 +170,7 @@ public class CLOPEClusterer implements Clusterer {
 
         Map<Long, CLOPECluster> sortedClusters = sortByValues(clusters);
         for (CLOPECluster cluster: sortedClusters.values()) {
-            if (cluster.getSize() < minClusterSize) {
+            if (cluster.getNumberOfTransactions() < minClusterSize) {
                 List<QualitativeInstance> instancesToMove = cluster.getInstances();
                 clusters.remove(cluster.getId());
                 for (QualitativeInstance inst: instancesToMove) {
