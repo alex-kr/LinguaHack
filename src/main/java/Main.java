@@ -18,9 +18,7 @@ public class Main extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-      getServletConfig().getServletContext()
-              .getRequestDispatcher("/home.html")
-              .forward(req,resp);
+      showOverview(req,resp);
 
   }
 
@@ -49,7 +47,7 @@ public class Main extends HttpServlet {
 
   }
 
-  private void showHome(HttpServletRequest req, HttpServletResponse resp)
+  private void showOverview(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     resp.setContentType("application/json");
     resp.getWriter().print("Hello! It's a CLOPE clustering app\n Input example:\n" +
