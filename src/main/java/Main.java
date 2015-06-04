@@ -19,7 +19,7 @@ public class Main extends HttpServlet {
       throws ServletException, IOException {
 
       getServletConfig().getServletContext()
-              .getRequestDispatcher("/home.jsp")
+              .getRequestDispatcher("/home.html")
               .forward(req,resp);
 
   }
