@@ -18,7 +18,9 @@ public class Main extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-      resp.sendRedirect("/home.jsp");
+      getServletConfig().getServletContext()
+              .getRequestDispatcher("/home.jsp")
+              .forward(req,resp);
 
   }
 
