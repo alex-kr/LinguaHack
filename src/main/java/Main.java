@@ -2,6 +2,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.*;
 
@@ -12,8 +13,7 @@ public class Main extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        //showOverview(req, resp);
-        resp.getWriter().print(req.getReader().read());
+        showOverview(req, resp);
 
     }
 
@@ -21,13 +21,22 @@ public class Main extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        resp.setContentType("application/json");
+        Gson gson = new Gson();
+        StringBuilder sb = new StringBuilder();
+        String s;
+        while ((s = req.getReader().readLine()) != null) {
+            sb.append(s);
+        }
+        resp.getWriter().print(sb.toString());
+
     }
 
-    /*private void showOverview(HttpServletRequest req, HttpServletResponse resp)
+    private void showOverview(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.setContentType("application/json");
         resp.getWriter().print("Hello! It's a LinguaHack app");
-    }*/
+    }
 
 
     public static void main(String[] args) throws Exception {
