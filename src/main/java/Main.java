@@ -20,6 +20,7 @@ public class Main extends HttpServlet {
     Parser parser;
     Algorithm algorithm;
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -31,6 +32,7 @@ public class Main extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
 
         class RawText {
             String text1;

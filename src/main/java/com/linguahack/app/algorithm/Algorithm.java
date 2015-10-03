@@ -1,6 +1,5 @@
 package com.linguahack.app.algorithm;
 
-
 import com.linguahack.app.core.Text;
 
 import java.util.Map;
