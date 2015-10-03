@@ -2,13 +2,13 @@ package com.linguahack.app.parser;
 
 import com.linguahack.app.core.TextStats;
 
-import java.security.Timestamp;
+import java.lang.Long;
 import java.util.*;
 
 public class ParserImpl implements Parser{
 
 
-    public TextStats parse(String inputText, Timestamp timestamp) {
+    public TextStats parse(String inputText, long timestamp) {
 
         return new TextStats(calcTempo(inputText, timestamp),
                              calcSaturation(inputText),
@@ -20,7 +20,7 @@ public class ParserImpl implements Parser{
                             );
     }
 
-    public double calcTempo(String inputText, Timestamp timestamp) {
+    public double calcTempo(String inputText, long timestamp) {
         return 0.0;
     }
 
