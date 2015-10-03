@@ -3,7 +3,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.linguahack.app.algorithm.Algorithm;
-import com.linguahack.app.core.Text;
+import com.linguahack.app.core.TextStats;
 import com.linguahack.app.parser.Parser;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -56,8 +56,8 @@ public class Main extends HttpServlet {
 
         RawText rawText = gson.fromJson(inputJson.toString(), RawText.class);
 
-        Text text1 = parser.parse(rawText.text1);
-        Text text2 = parser.parse(rawText.text2);
+        TextStats text1 = parser.parse(rawText.text1);
+        TextStats text2 = parser.parse(rawText.text2);
 
         Map<String, Double> contexts = algorithm.process(text1, text2);
 

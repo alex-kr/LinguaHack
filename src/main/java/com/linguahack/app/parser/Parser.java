@@ -1,7 +1,7 @@
 package com.linguahack.app.parser;
 
-import com.linguahack.app.core.Text;
+import com.linguahack.app.core.TextStats;
 
 public interface Parser {
-    Text parse(String inputText);
+    TextStats parse(String inputText);
 }
