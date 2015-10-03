@@ -14,6 +14,6 @@ public class AlgorithmMockImpl implements Algorithm {
         test.put("chill", 27.1);
         test.put("sex", 29.8);
         test.put("friends", 93.0);
-        return null;
+        return test;
     }
 }
