@@ -3,8 +3,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.linguahack.app.algorithm.Algorithm;
+import com.linguahack.app.algorithm.AlgorithmMockImpl;
 import com.linguahack.app.core.TextStats;
 import com.linguahack.app.parser.Parser;
+import com.linguahack.app.parser.ParserMockImpl;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -20,8 +22,9 @@ import java.util.Map.Entry;
 
 
 public class Main extends HttpServlet {
-    Parser parser;
-    Algorithm algorithm;
+    Parser parser = new ParserMockImpl();
+    Algorithm algorithm = new AlgorithmMockImpl();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
