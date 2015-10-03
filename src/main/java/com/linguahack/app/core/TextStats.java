@@ -1,8 +1,6 @@
 package com.linguahack.app.core;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TextStats {
     private final double tempo;

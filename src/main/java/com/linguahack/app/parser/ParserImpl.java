@@ -41,11 +41,11 @@ public class ParserImpl implements Parser{
     }
 
     public Map<String, Integer> getWordsAmountMap(String inputText) {
-        return new HashMap();
+        return new HashMap<>();
     }
 
     public Map<Character, Integer> getLettersAmountMap(String inputText) {
-        return new HashMap();
+        return new HashMap<>();
     }
 
 
