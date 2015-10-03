@@ -53,8 +53,8 @@ public class Main extends HttpServlet {
 
         RawText rawText = gson.fromJson(inputJson.toString(), RawText.class);
 
-        TextStats text1 = parser.parse(rawText.text1);
-        TextStats text2 = parser.parse(rawText.text2);
+        TextStats text1 = parser.parse(rawText.text1, 0);
+        TextStats text2 = parser.parse(rawText.text2, 0);
 
         Map<String, Double> contexts = algorithm.process(text1, text2);
 
