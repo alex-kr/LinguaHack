@@ -1,4 +1,10 @@
 {
-  "text1":"Hello! How r u! Great thx! Y, See you",
-  "text2":"Hi! Nice, u? meeting 2day?"
+  "speech1":{
+    "length":19214,
+    "text":"Hello!&How r u!&Great thx,&meeting 2day?"
+  },
+  "speech2":{
+    "length":10544,
+    "text":"Hi!&Nice, u?&Yeah, See you"
+  }
 }

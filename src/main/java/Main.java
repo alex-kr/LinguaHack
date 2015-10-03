@@ -38,12 +38,6 @@ public class Main extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-
-        class RawText {
-            String text1;
-            String text2;
-        }
-
         BufferedReader input = req.getReader();
         StringBuilder inputJson = new StringBuilder();
         try {
@@ -84,6 +78,10 @@ public class Main extends HttpServlet {
         resp.getWriter().print("Hello! It's a LinguaHack app");
     }
 
+    private class RawText {
+        String text1;
+        String text2;
+    }
 
     public static void main(String[] args) throws Exception {
         Server server = new Server(Integer.valueOf(System.getenv("PORT")));
