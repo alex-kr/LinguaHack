@@ -1,14 +1,20 @@
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
 
 import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.*;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 
 public class Main extends HttpServlet {
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -21,14 +27,19 @@ public class Main extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        resp.setContentType("application/json");
-        Gson gson = new Gson();
-        StringBuilder sb = new StringBuilder();
-        String s;
-        while ((s = req.getReader().readLine()) != null) {
-            sb.append(s);
+
+        BufferedReader input = req.getReader();
+        StringBuilder inputJson = new StringBuilder();
+        try {
+            String s;
+            while ((s = input.readLine()) != null) {
+                inputJson.append(s);
+            }
+        } catch (IOException ignored) {
+            resp.sendError(400);
         }
-        resp.getWriter().print(sb.toString());
+
+        Gson gson = new Gson();
 
     }
 
@@ -48,4 +59,6 @@ public class Main extends HttpServlet {
         server.start();
         server.join();
     }
+
 }
+

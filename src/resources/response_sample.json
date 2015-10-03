@@ -1,0 +1,13 @@
+{
+  "id": "",
+  "contexts": [
+    {
+      "relationship_type": "work",
+      "percent": 67.9
+    },
+    {
+      "relationship_type": "home",
+      "percent": 30.1
+    }
+  ]
+}
