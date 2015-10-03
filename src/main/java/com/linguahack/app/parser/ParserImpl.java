@@ -1,8 +1,8 @@
 package com.linguahack.app.parser;
 
 import com.linguahack.app.core.TextStats;
+import org.omg.CORBA.INTERNAL;
 
-import java.lang.Long;
 import java.util.*;
 
 public class ParserImpl implements Parser{
@@ -21,7 +21,25 @@ public class ParserImpl implements Parser{
     }
 
     public double calcTempo(String inputText, long timestamp) {
-        return 0.0;
+        int charCount = 0;
+        int charCode;
+        double result;
+
+        for( int i = 0; i < inputText.length( ); i++ )
+        {
+            charCode = (int) inputText.charAt( i );
+
+            if( (charCode >= 97 && charCode<= 122))
+                charCount++;
+        }
+
+        if (timestamp > 0) {
+            result = charCount/timestamp;
+        } else {
+            result = 0;
+        }
+
+        return result;
     }
 
     public double calcSaturation(String inputText) {
@@ -45,7 +63,21 @@ public class ParserImpl implements Parser{
     }
 
     public Map<Character, Integer> getLettersAmountMap(String inputText) {
-        return new HashMap();
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+
+        char letter;
+
+        for( int i=0; i<inputText.length(); i++ ) {
+            letter = inputText.charAt(i);
+            if(((int) letter >= 97 && (int) letter<= 122)) {
+                if (map.containsKey(letter)) {
+                    map.put(letter, map.get(letter) + 1);
+                } else {
+                    map.put(letter, 1);
+                }
+            }
+        }
+        return map;
     }
 
 
