@@ -74,7 +74,7 @@ public class Main extends HttpServlet {
         }
         jsonResponse.add("contexts", array);
 
-        String response = jsonResponse.getAsString();
+        String response = jsonResponse.toString();
         resp.getWriter().print(response);
     }
 
