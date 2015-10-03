@@ -25,7 +25,7 @@ public class ParserImpl implements Parser {
         return "";
     }
 
-    private double calcTempo(String inputText, long timestamp) {
+    public double calcTempo(String inputText, long timestamp) {
         int charCount = 0;
         int charCode;
         double result;
@@ -46,27 +46,27 @@ public class ParserImpl implements Parser {
         return result;
     }
 
-    private double calcSaturation(String inputText) {
+    public double calcSaturation(String inputText) {
         return 0.0;
     }
 
-    private int calcLength(String inputText) {
+    public int calcLength(String inputText) {
         return inputText.split("[^a-z]+").length;
     }
 
-    private double calcArtistry(String inputText) {
+    public double calcArtistry(String inputText) {
         return 0.0;
     }
 
-    private double calcActivity(String inputText) {
+    public double calcActivity(String inputText) {
         return 0.0;
     }
 
     public Map<String, Integer> getWordsAmountMap(String inputText) {
-        return new HashMap<>();
+        return new HashMap<String, Integer>();
     }
 
-    private Map<Character, Integer> getLettersAmountMap(String inputText) {
+    public Map<Character, Integer> getLettersAmountMap(String inputText) {
         Map<Character, Integer> map = new HashMap<Character, Integer>();
 
         char letter;
@@ -81,6 +81,7 @@ public class ParserImpl implements Parser {
                 }
             }
         }
+
         return map;
     }
 
