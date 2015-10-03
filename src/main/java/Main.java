@@ -1,5 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.linguahack.app.algorithm.Algorithm;
 import com.linguahack.app.core.Text;
 import com.linguahack.app.parser.Parser;
@@ -14,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class Main extends HttpServlet {
     Parser parser;
     Algorithm algorithm;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -59,7 +61,18 @@ public class Main extends HttpServlet {
 
         Map<String, Double> contexts = algorithm.process(text1, text2);
 
+        JsonObject jsonResponse = new JsonObject();
+        JsonArray array = new JsonArray();
+        for (Entry<String, Double> entry : contexts.entrySet()) {
+            JsonObject context = new JsonObject();
+            context.addProperty("relationship_type", entry.getKey());
+            context.addProperty("percent", entry.getValue());
+            array.add(context);
+        }
+        jsonResponse.add("contexts", array);
 
+        String response = jsonResponse.getAsString();
+        resp.getWriter().print(response);
     }
 
     private void showOverview(HttpServletRequest req, HttpServletResponse resp)
