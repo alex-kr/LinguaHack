@@ -4,5 +4,5 @@ import com.linguahack.app.core.TextStats;
 
 
 public interface Parser {
-    TextStats parse(String inputText, long timestamp);
+    TextStats parse(String inputText, Long timestamp);
 }
