@@ -235,7 +235,7 @@ public class ParserImpl implements Parser {
         }
 
         if (overalWordsNumber != 0) {
-            result = wordsCounter/overalWordsNumber;
+            result = (double)wordsCounter/overalWordsNumber;
         } else {
             result = 0.0;
         }
