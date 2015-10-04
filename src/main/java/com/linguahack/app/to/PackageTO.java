@@ -1,8 +1,5 @@
 package com.linguahack.app.to;
 
-/**
- * Created by pc on 04.10.2015.
- */
 public class PackageTO {
 
     SpeechTO speech1;
