@@ -33,7 +33,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     static class Config {
-        private final Map<Parameters, ParameterInfo> param2info = new HashMap<Parameters, ParameterInfo>();
+        private final Map<Parameters, ParameterInfo> param2info = new HashMap<>();
         private int minRequiredWordsQuantity = 3;
 
         public int getMinRequiredWordsQuantity() {
@@ -67,7 +67,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
     @Override
     public Map<String, Double> process(TextStats t1, TextStats t2) {
-        Map<String, Double> result = new HashMap<String, Double>();
+        Map<String, Double> result = new HashMap<>();
         Dialog dialog = computeDialog(t1, t2);
         result.put("base", base(dialog));
         result.put("development", sphereDevelopment(dialog));
@@ -112,11 +112,10 @@ public class AlgorithmsBaseImpl implements Algorithm {
         double result = 0.0;
         result += dialog.saturation;
         result += dialog.consistency;
-        result += dialog.activity;
         result += dialog.synonymy;
         result += dialog.antonymy;
         result += dialog.semantics;
-        return result / 55.0 * 100.0;
+        return result / 45.0 * 100.0;
     }
 
     private double sphereTrust(Dialog dialog) {
@@ -124,15 +123,15 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.consistency;
         result += dialog.artistry;
         result += dialog.synonymy;
-        result += dialog.antonymy;
         result += dialog.sinton;
-        return result / 60.0 * 100.0;
+        return result / 50.0 * 100.0;
     }
 
     private double sphereEmotions(Dialog dialog) {
         double result = 0.0;
         result += dialog.tempo;
         result += dialog.artistry;
+        result += dialog.activity;
         result += dialog.semantics;
         result += dialog.sinton;
         return result / 50.0 * 100.0;
@@ -143,7 +142,8 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.tempo;
         result += dialog.length;
         result += dialog.activity;
-        return result / 25.0 * 100.0;
+        result += dialog.sinton;
+        return result / 45.0 * 100.0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +177,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         }
         try {
             Set<String> words1 = preprocessSynonyms(w1);
-            Set<String> words2 = new HashSet<String>();
+            Set<String> words2 = new HashSet<>();
             for (Entry<String, Integer> entry : w2.entrySet()) {
                 if (entry.getValue() > config.getMinRequiredWordsQuantity()) {
                     words2.add(entry.getKey());
@@ -220,10 +220,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
             return 0.0;
         }
 
-        int total1 = w1.size();
-
-        // с учетом позитивного и негативного использования слов?? eto kak voobshe?
-
         int straightHits = 0;
         int synonymHits = 0;
         int antonymsHits = 0;
@@ -245,7 +241,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
             boolean b = (2.0 * straightHits + synonymHits - 2.0 * antonymsHits) > config.criteria(SEMANTICS);
 
-            return config.weight(SEMANTICS);
+            return b ? config.weight(SEMANTICS) : 0.0;
         } catch (IOException ignored) {
             return 0.0;
         }
@@ -262,13 +258,13 @@ public class AlgorithmsBaseImpl implements Algorithm {
             total2 += entry.getValue();
         }
 
-        Set<Character> preferable1 = new HashSet<Character>();
-        Set<Character> ignored1 = new HashSet<Character>();
+        Set<Character> preferable1 = new HashSet<>();
+        Set<Character> ignored1 = new HashSet<>();
         splitLetters(l1, total1, preferable1, ignored1);
 
 
-        Set<Character> preferable2 = new HashSet<Character>();
-        Set<Character> ignored2 = new HashSet<Character>();
+        Set<Character> preferable2 = new HashSet<>();
+        Set<Character> ignored2 = new HashSet<>();
         splitLetters(l2, total2, preferable2, ignored2);
 
         int points = 0;
@@ -319,7 +315,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private Set<String> preprocessSynonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         for (Entry<String, Integer> entry : w1.entrySet()) {
             if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
                 result.add(entry.getKey());
@@ -330,7 +326,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
-        Set<String> synonyms = new HashSet<String>();
+        Set<String> synonyms = new HashSet<>();
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
@@ -342,7 +338,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
             }
 
 
-            IWordID wordID = null; // 1st meaning
+            IWordID wordID; // 1st meaning
             try {
                 IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
                 wordID = idxWord.getWordIDs().get(0);
@@ -361,7 +357,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private Set<String> preProcessAntonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         for (Entry<String, Integer> entry : w1.entrySet()) {
             if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
                 result.add(entry.getKey());
@@ -372,7 +368,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
-        Set<String> antonyms = new HashSet<String>();
+        Set<String> antonyms = new HashSet<>();
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
