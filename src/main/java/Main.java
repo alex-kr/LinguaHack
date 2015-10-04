@@ -4,9 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.linguahack.app.algorithm.Algorithm;
 import com.linguahack.app.algorithm.AlgorithmMockImpl;
+import com.linguahack.app.algorithm.AlgorithmsBaseImpl;
 import com.linguahack.app.core.TextStats;
 import com.linguahack.app.parser.Parser;
+import com.linguahack.app.parser.ParserImpl;
 import com.linguahack.app.parser.ParserMockImpl;
+import com.linguahack.app.to.PackageTO;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -22,8 +25,8 @@ import java.util.Map.Entry;
 
 
 public class Main extends HttpServlet {
-    Parser parser = new ParserMockImpl();
-    Algorithm algorithm = new AlgorithmMockImpl();
+    Parser parser = new ParserImpl();
+    Algorithm algorithm = new AlgorithmsBaseImpl();
 
 
     @Override
@@ -49,12 +52,13 @@ public class Main extends HttpServlet {
             resp.sendError(400);
         }
 
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new Gson();
+        PackageTO packageTo = (PackageTO)gson.fromJson(inputJson.toString(), PackageTO.class);
+        // rawText = gson.fromJson(inputJson.toString(), RawText.class);
 
-        RawText rawText = gson.fromJson(inputJson.toString(), RawText.class);
+        TextStats text1 = parser.parse(packageTo.getSpeech1().getText(), packageTo.getSpeech1().getLength());
+        TextStats text2 = parser.parse(packageTo.getSpeech2().getText(), packageTo.getSpeech1().getLength());
 
-        TextStats text1 = parser.parse(rawText.text1, 0);
-        TextStats text2 = parser.parse(rawText.text2, 0);
 
         Map<String, Double> contexts = algorithm.process(text1, text2);
 

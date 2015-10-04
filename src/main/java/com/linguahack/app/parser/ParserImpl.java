@@ -1,5 +1,6 @@
 package com.linguahack.app.parser;
 
+import com.linguahack.app.POSHelper;
 import com.linguahack.app.core.TextStats;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
@@ -129,33 +130,7 @@ public class ParserImpl implements Parser {
         return tagger.tag(tokens);
     }
 
-  /*  public String getProcessedSentence(String inputText) {
-        InputStream modelIn = null;
-        POSModel model = null;
 
-        try {
-            modelIn = new FileInputStream("src/resources/en-pos-maxent.bin");
-            model = new POSModel(modelIn);
-        }
-        catch (IOException e) {
-            // Model loading failed, handle the error
-            e.printStackTrace();
-        }
-        finally {
-            if (modelIn != null) {
-                try {
-                    modelIn.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        POSTaggerME tagger = new POSTaggerME(model);
-
-        return null;
-    }*/
 
     public double calcTempo(String inputText, long timestamp) {
         int charCount = 0;
@@ -179,7 +154,27 @@ public class ParserImpl implements Parser {
     }
 
     public double calcSaturation(String inputText) {
-        return 0.0;
+        List<String> sentences = getSentences(inputText);
+        int sentAmount = sentences.size();
+        int counOfminingfulWords = 0;
+        double result;
+        String[] tags = null;
+
+        for (String sentence: sentences) {
+            tags = getTags(getTokens(sentence));
+            for (int i=0; i < tags.length ; i++ ) {
+                if (POSHelper.getPartOfSpeech(tags[i]) != "") {
+                    counOfminingfulWords++;
+                }
+            }
+        }
+
+        if (sentAmount != 0) {
+            result = counOfminingfulWords/sentAmount;
+        } else {
+            return 0.0;
+        }
+        return result;
     }
 
     public int calcLength(String inputText) {
@@ -187,11 +182,44 @@ public class ParserImpl implements Parser {
     }
 
     public double calcArtistry(String inputText) {
-        return 0.0;
+        String[] tokens = getTokens(inputText);
+        int overalWordsNumber = tokens.length;
+        int wordsCounter = 0;
+        double result;
+
+        for (int i =0; i < overalWordsNumber; i++) {
+            if ((POSHelper.getPartOfSpeech(tokens[i]) == "_adjective") ||
+                (POSHelper.getPartOfSpeech(tokens[i]) == "_adverb"   )) {
+                wordsCounter++;
+            }
+        }
+
+        if (overalWordsNumber != 0) {
+            result = wordsCounter/overalWordsNumber;
+        } else {
+            result = 0.0;
+        }
+        return result;
     }
 
     public double calcActivity(String inputText) {
-        return 0.0;
+        String[] tokens = getTokens(inputText);
+        int overalWordsNumber = tokens.length;
+        int wordsCounter = 0;
+        double result;
+
+        for (int i =0; i < overalWordsNumber; i++) {
+            if (POSHelper.getPartOfSpeech(tokens[i]) == "_verb") {
+                wordsCounter++;
+            }
+        }
+
+        if (overalWordsNumber != 0) {
+            result = wordsCounter/overalWordsNumber;
+        } else {
+            result = 0.0;
+        }
+        return result;
     }
 
     public Map<String, Integer> getWordsAmountMap(String inputText) {
@@ -218,7 +246,23 @@ public class ParserImpl implements Parser {
     }
 
     public double calcConsistency(String inputText) {
-        return 0;
+        String[] tokens = getTokens(inputText);
+        int overalWordsNumber = tokens.length;
+        int wordsCounter = 0;
+        double result;
+
+        for (int i =0; i < overalWordsNumber; i++) {
+            if (POSHelper.getPartOfSpeech(tokens[i]) != ""){
+                wordsCounter++;
+            }
+        }
+
+        if (overalWordsNumber != 0) {
+            result = wordsCounter/overalWordsNumber;
+        } else {
+            result = 0.0;
+        }
+        return result;
     }
 
 
