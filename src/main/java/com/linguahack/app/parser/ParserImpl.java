@@ -155,9 +155,9 @@ public class ParserImpl implements Parser {
         }
 
         if (timestamp > 0) {
-            result = charCount / timestamp;
+            result = (double)charCount / timestamp;
         } else {
-            result = 0;
+            result = 0.0;
         }
 
         return result;

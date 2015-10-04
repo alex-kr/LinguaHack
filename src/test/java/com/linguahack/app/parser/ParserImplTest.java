@@ -34,7 +34,7 @@ public class ParserImplTest {
     @Test
     public void test_calcTempo() {
         Assert.assertThat(0.0, is(parser.calcTempo(inputText, 0)));
-        Assert.assertThat(29.0, is(parser.calcTempo(inputText, 1)));
+        Assert.assertThat(29.0, is(parser.calcTempo(inputText, 2)));
     }
 
     @Test
