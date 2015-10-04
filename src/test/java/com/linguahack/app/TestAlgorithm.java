@@ -1,4 +1,4 @@
-package com.linguahack.app;
+package java.com.linguahack.app;
 
 import com.linguahack.app.algorithm.Algorithm;
 import com.linguahack.app.algorithm.AlgorithmsBaseImpl;
@@ -29,7 +29,6 @@ public class TestAlgorithm {
                 new HashMap<String, Integer>(), new HashMap<Character, Integer>());
 
         Map<String, Double> map = algorithm.process(base, passes);
-        System.out.println(map.get("base"));
         assertTrue(map.get("base") > 40.0);
 
         map = algorithm.process(base, notPasses);

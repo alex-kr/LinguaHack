@@ -1,5 +1,6 @@
 package com.linguahack.app.algorithm;
 
+import com.linguahack.app.core.Dialog;
 import com.linguahack.app.core.TextStats;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -51,12 +52,12 @@ public class AlgorithmsBaseImpl implements Algorithm {
             Config defaultConfig = new Config();
             defaultConfig.param2info.put(TEMPO, new ParameterInfo(80.0, 10.0));
             defaultConfig.param2info.put(SATURATION, new ParameterInfo(80.0, 5.0));
-            defaultConfig.param2info.put(CONSISTENCY, new ParameterInfo(80.0, 5.0));
-            defaultConfig.param2info.put(LENGTH, new ParameterInfo(70.0, 10.0));
+            defaultConfig.param2info.put(CONSISTENCY, new ParameterInfo(90.0, 10.0));
+            defaultConfig.param2info.put(LENGTH, new ParameterInfo(70.0, 5.0));
             defaultConfig.param2info.put(ARTISTRY, new ParameterInfo(90.0, 10.0));
             defaultConfig.param2info.put(ACTIVITY, new ParameterInfo(90.0, 10.0));
             defaultConfig.param2info.put(SYNONYMY, new ParameterInfo(30.0, 10.0));
-            defaultConfig.param2info.put(ANTONYMY, new ParameterInfo(70.0, 10.0));
+            defaultConfig.param2info.put(ANTONYMY, new ParameterInfo(80.0, 10.0));
             defaultConfig.param2info.put(SEMANTICS, new ParameterInfo(0.0, 10.0));
             defaultConfig.param2info.put(SINTONITY, new ParameterInfo(0.0, 10.0));
             defaultConfig.param2info.put(ASINTONITY, new ParameterInfo(0.0, 10.0));
@@ -67,22 +68,81 @@ public class AlgorithmsBaseImpl implements Algorithm {
     @Override
     public Map<String, Double> process(TextStats t1, TextStats t2) {
         Map<String, Double> result = new HashMap<>();
-        result.put("base", defineBase(t1, t2));
+        Dialog dialog = computeDialog(t1, t2);
+        result.put("base", base(dialog));
+        result.put("development", sphereDevelopment(dialog));
+        result.put("trusty", sphereTrust(dialog));
+        result.put("emotions", sphereEmotions(dialog));
+        result.put("leadership", sphereLeaderShip(dialog));
         return result;
     }
 
-    private double defineBase(TextStats t1, TextStats t2) {
+    private Dialog computeDialog(TextStats t1, TextStats t2) {
+        double tempo = passesTempo(t1.getTempo(), t2.getTempo());
+        double saturation = passesSaturation(t1.getSaturation(), t2.getSaturation());
+        double length = passesLength(t1.getLength(), t2.getLength());
+        double consistency = passesConsistency(t1.getConsistency(), t2.getConsistency());
+        double artistry = passesArtistry(t1.getArtistry(), t2.getArtistry());
+        double activity = passesActivity(t1.getActivity(), t2.getActivity());
+        double synonymy = passesSynonymy(t1.getWordsAmountMap(), t2.getWordsAmountMap());
+        double antonymy = passesAntonymy(t1.getWordsAmountMap(), t2.getWordsAmountMap());
+        double semantics = passesSemantics(t1.getWordsAmountMap(), t2.getWordsAmountMap());
+        double sinton = passesSinton(t1.getLettersAmountMap(), t2.getLettersAmountMap());
+
+        return new Dialog(tempo, saturation, consistency, length,
+                artistry, activity, synonymy, antonymy, semantics, sinton);
+    }
+
+    private double base(Dialog dialog) {
         double result = 0.0;
-        result += passesTempo(t1.getTempo(), t2.getTempo());
-        result += passesSaturation(t1.getSaturation(), t2.getSaturation());
-        result += passesLength(t1.getLength(), t2.getLength());
-        result += passesConsistency(t1.getConsistency(), t2.getConsistency());
-        result += passesArtistry(t1.getArtistry(), t2.getArtistry());
-        result += passesActivity(t1.getActivity(), t2.getActivity());
-        result += passesSynonymy(t1.getWordsAmountMap(), t2.getWordsAmountMap());
-        result += passesAntonymy(t1.getWordsAmountMap(), t2.getWordsAmountMap());
-        result += passesSemantics(t1.getWordsAmountMap(), t2.getWordsAmountMap());
-        result += passesSinton(t1.getLettersAmountMap(), t2.getLettersAmountMap());
+        result += dialog.tempo;
+        result += dialog.saturation;
+        result += dialog.consistency;
+        result += dialog.length;
+        result += dialog.artistry;
+        result += dialog.activity;
+        result += dialog.synonymy;
+        result += dialog.antonymy;
+        result += dialog.semantics;
+        result += dialog.sinton;
+        return result;
+    }
+
+    private double sphereDevelopment(Dialog dialog) {
+        double result = 0.0;
+        result += dialog.saturation;
+        result += dialog.consistency;
+        result += dialog.activity;
+        result += dialog.synonymy;
+        result += dialog.antonymy;
+        result += dialog.semantics;
+        return result;
+    }
+
+    private double sphereTrust(Dialog dialog) {
+        double result = 0.0;
+        result += dialog.consistency;
+        result += dialog.artistry;
+        result += dialog.synonymy;
+        result += dialog.antonymy;
+        result += dialog.sinton;
+        return result;
+    }
+
+    private double sphereEmotions(Dialog dialog) {
+        double result = 0.0;
+        result += dialog.tempo;
+        result += dialog.artistry;
+        result += dialog.semantics;
+        result += dialog.sinton;
+        return result;
+    }
+
+    private double sphereLeaderShip(Dialog dialog) {
+        double result = 0.0;
+        result += dialog.tempo;
+        result += dialog.length;
+        result += dialog.activity;
         return result;
     }
 
@@ -111,8 +171,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
         return ifPassesCriteria(a1, a2, config.criteria(ACTIVITY)) ? config.weight(ACTIVITY) : 0.0;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private double passesSynonymy(Map<String, Integer> w1, Map<String, Integer> w2) {
         if (w1.isEmpty() || w2.isEmpty()) {
             return 0.0;
@@ -137,42 +195,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
         }
     }
 
-    private Set<String> preprocessSynonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<>();
-        for (Entry<String, Integer> entry : w1.entrySet()) {
-            if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
-                result.add(entry.getKey());
-            }
-        }
-        // spreading with synonyms
-        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
-        IDictionary dict = new Dictionary(wordNetPath);
-        dict.open();
-
-        Set<String> synonyms = new HashSet<>();
-        for (String sample : result) {
-
-            int underscore = sample.indexOf('_');
-            String word = sample.substring(0, underscore);
-            String part = sample.substring(underscore + 1);
-
-
-            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
-            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
-
-            IWord iWord = dict.getWord(wordID);
-            ISynset synset = iWord.getSynset();
-
-            for (IWord w : synset.getWords()) {
-                synonyms.add(w.getLemma() + "_" + part);
-            }
-        }
-
-        result.addAll(synonyms);
-
-        return result;
-    }
-
     private double passesAntonymy(Map<String, Integer> w1, Map<String, Integer> w2) {
         if (w1.isEmpty() || w2.isEmpty()) {
             return config.weight(ANTONYMY);
@@ -191,61 +213,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
         } catch (IOException ignored) {
             return 0.0;
         }
-    }
-
-    private Set<String> preProcessAntonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<>();
-        for (Entry<String, Integer> entry : w1.entrySet()) {
-            if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
-                result.add(entry.getKey());
-            }
-        }
-
-        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
-        IDictionary dict = new Dictionary(wordNetPath);
-        dict.open();
-
-        Set<String> antonyms = new HashSet<>();
-        for (String sample : result) {
-
-            int underscore = sample.indexOf('_');
-            String word = sample.substring(0, underscore);
-            String part = sample.substring(underscore + 1);
-
-
-            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
-
-            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
-
-            IWord iWord = dict.getWord(wordID);
-
-            Map<IPointer, List<IWordID>> relatedMap = iWord.getRelatedMap();
-
-            for (Entry<IPointer, List<IWordID>> entry : relatedMap.entrySet()) {
-                for (IWordID wordID1 : entry.getValue()) {
-                    IWord iWord1 = dict.getWord(wordID1);
-                    antonyms.add(iWord1.getLemma() + "_" + part);
-                }
-            }
-        }
-
-        return antonyms;
-    }
-
-    private POS definePos(String pos) {
-        if (pos.equals("noun")) {
-            return POS.NOUN;
-        }
-        if (pos.equals("verb")) {
-            return POS.VERB;
-        }
-        if (pos.equals("adjective")) {
-            return POS.ADJECTIVE;
-        }
-        if (pos.equals("adverb")) {
-            return POS.ADVERB;
-        }
-        throw new RuntimeException();
     }
 
     private double passesSemantics(Map<String, Integer> w1, Map<String, Integer> w2) {
@@ -328,6 +295,98 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
         result += points > config.criteria(ASINTONITY) ? config.weight(ASINTONITY) : 0.0;
         return result;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private Set<String> preprocessSynonyms(Map<String, Integer> w1) throws IOException {
+        Set<String> result = new HashSet<>();
+        for (Entry<String, Integer> entry : w1.entrySet()) {
+            if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
+                result.add(entry.getKey());
+            }
+        }
+        // spreading with synonyms
+        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
+        IDictionary dict = new Dictionary(wordNetPath);
+        dict.open();
+
+        Set<String> synonyms = new HashSet<>();
+        for (String sample : result) {
+
+            int underscore = sample.indexOf('_');
+            String word = sample.substring(0, underscore);
+            String part = sample.substring(underscore + 1);
+
+
+            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
+            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
+
+            IWord iWord = dict.getWord(wordID);
+            ISynset synset = iWord.getSynset();
+
+            for (IWord w : synset.getWords()) {
+                synonyms.add(w.getLemma() + "_" + part);
+            }
+        }
+
+        result.addAll(synonyms);
+
+        return result;
+    }
+
+    private Set<String> preProcessAntonyms(Map<String, Integer> w1) throws IOException {
+        Set<String> result = new HashSet<>();
+        for (Entry<String, Integer> entry : w1.entrySet()) {
+            if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
+                result.add(entry.getKey());
+            }
+        }
+
+        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
+        IDictionary dict = new Dictionary(wordNetPath);
+        dict.open();
+
+        Set<String> antonyms = new HashSet<>();
+        for (String sample : result) {
+
+            int underscore = sample.indexOf('_');
+            String word = sample.substring(0, underscore);
+            String part = sample.substring(underscore + 1);
+
+
+            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
+
+            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
+
+            IWord iWord = dict.getWord(wordID);
+
+            Map<IPointer, List<IWordID>> relatedMap = iWord.getRelatedMap();
+
+            for (Entry<IPointer, List<IWordID>> entry : relatedMap.entrySet()) {
+                for (IWordID wordID1 : entry.getValue()) {
+                    IWord iWord1 = dict.getWord(wordID1);
+                    antonyms.add(iWord1.getLemma() + "_" + part);
+                }
+            }
+        }
+
+        return antonyms;
+    }
+
+    private POS definePos(String pos) {
+        if (pos.equals("noun")) {
+            return POS.NOUN;
+        }
+        if (pos.equals("verb")) {
+            return POS.VERB;
+        }
+        if (pos.equals("adjective")) {
+            return POS.ADJECTIVE;
+        }
+        if (pos.equals("adverb")) {
+            return POS.ADVERB;
+        }
+        throw new RuntimeException();
     }
 
     private void splitLetters(Map<Character, Integer> l1, int total1, Set<Character> preferable1, Set<Character> ignored1) {
