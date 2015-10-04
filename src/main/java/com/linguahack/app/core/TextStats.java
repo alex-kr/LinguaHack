@@ -5,6 +5,7 @@ import java.util.Map;
 public class TextStats {
     private final double tempo;
     private final double saturation;
+    private final double consistency;
     private final int length;
     private final double artistry;
     private final double activity;
@@ -12,10 +13,11 @@ public class TextStats {
     private final Map<String, Integer> wordsAmountMap;
     private final Map<Character, Integer> lettersAmountMap;
 
-    public TextStats(double tempo, double saturation, int length, double artistry, double activity,
+    public TextStats(double tempo, double saturation, double consistency, int length, double artistry, double activity,
                      Map<String, Integer> wordsAmountMap, Map<Character, Integer> lettersAmountMap) {
         this.tempo = tempo;
         this.saturation = saturation;
+        this.consistency = consistency;
         this.length = length;
         this.artistry = artistry;
         this.activity = activity;
@@ -30,6 +32,10 @@ public class TextStats {
 
     public double getSaturation() {
         return saturation;
+    }
+
+    public double getConsistency() {
+        return consistency;
     }
 
     public int getLength() {
@@ -51,8 +57,7 @@ public class TextStats {
     public Map<Character, Integer> getLettersAmountMap() {
         return lettersAmountMap;
     }
-
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
