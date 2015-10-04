@@ -393,6 +393,10 @@ public class AlgorithmsBaseImpl implements Algorithm {
         for (Entry<Character, Integer> entry : l1.entrySet()) {
             double percent = (double) entry.getValue() / total1;
 
+            if (!IDEAL_CAT_1.containsKey(entry.getKey()) && !IDEAL_CAT_2.containsKey(entry.getKey())) {
+                continue;
+            }
+
             double idealValue = IDEAL_CAT_1.containsKey(entry.getKey())
                     ? IDEAL_CAT_1.get(entry.getKey()) : IDEAL_CAT_2.get(entry.getKey());
 
