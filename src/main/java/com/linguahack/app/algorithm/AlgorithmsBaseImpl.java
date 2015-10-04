@@ -53,9 +53,9 @@ public class AlgorithmsBaseImpl implements Algorithm {
             defaultConfig.param2info.put(TEMPO, new ParameterInfo(80.0, 10.0));
             defaultConfig.param2info.put(SATURATION, new ParameterInfo(80.0, 5.0));
             defaultConfig.param2info.put(CONSISTENCY, new ParameterInfo(90.0, 10.0));
-            defaultConfig.param2info.put(LENGTH, new ParameterInfo(70.0, 5.0));
-            defaultConfig.param2info.put(ARTISTRY, new ParameterInfo(90.0, 10.0));
-            defaultConfig.param2info.put(ACTIVITY, new ParameterInfo(90.0, 10.0));
+            defaultConfig.param2info.put(LENGTH, new ParameterInfo(60.0, 5.0));
+            defaultConfig.param2info.put(ARTISTRY, new ParameterInfo(80.0, 10.0));
+            defaultConfig.param2info.put(ACTIVITY, new ParameterInfo(80.0, 10.0));
             defaultConfig.param2info.put(SYNONYMY, new ParameterInfo(30.0, 10.0));
             defaultConfig.param2info.put(ANTONYMY, new ParameterInfo(80.0, 10.0));
             defaultConfig.param2info.put(SEMANTICS, new ParameterInfo(0.0, 10.0));
