@@ -9,6 +9,7 @@ import com.linguahack.app.core.TextStats;
 import com.linguahack.app.parser.Parser;
 import com.linguahack.app.parser.ParserImpl;
 import com.linguahack.app.parser.ParserMockImpl;
+import com.linguahack.app.to.PackageTO;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -51,15 +52,12 @@ public class Main extends HttpServlet {
             resp.sendError(400);
         }
 
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new Gson();
+        PackageTO packageTo = (PackageTO)gson.fromJson(inputJson.toString(), PackageTO.class);
+        // rawText = gson.fromJson(inputJson.toString(), RawText.class);
 
-        RawText rawText = gson.fromJson(inputJson.toString(), RawText.class);
-
-        if (rawText.text1 == null) {
-            throw new IOException();
-        }
-        TextStats text1 = parser.parse(rawText.text1, 10);
-        TextStats text2 = parser.parse(rawText.text2, 15);
+        TextStats text1 = parser.parse(packageTo.getSpeech1().getText(), packageTo.getSpeech1().getLength());
+        TextStats text2 = parser.parse(packageTo.getSpeech2().getText(), packageTo.getSpeech1().getLength());
 
 
         Map<String, Double> contexts = algorithm.process(text1, text2);
