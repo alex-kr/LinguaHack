@@ -1,7 +1,7 @@
 {
   "contexts": [
     {
-      "relationship_type": "sphere",
+      "relationship_type": "base",
       "percent": 67.9
     },
     {

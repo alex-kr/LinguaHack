@@ -34,6 +34,4 @@ public class TestAlgorithm {
         map = algorithm.process(base, notPasses);
         assertTrue(map.get("base") < 70.0);
     }
-
-
 }
