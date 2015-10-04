@@ -116,7 +116,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.synonymy;
         result += dialog.antonymy;
         result += dialog.semantics;
-        return result;
+        return result / 55.0 * 100.0;
     }
 
     private double sphereTrust(Dialog dialog) {
@@ -126,7 +126,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.synonymy;
         result += dialog.antonymy;
         result += dialog.sinton;
-        return result;
+        return result / 60.0 * 100.0;
     }
 
     private double sphereEmotions(Dialog dialog) {
@@ -135,7 +135,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.artistry;
         result += dialog.semantics;
         result += dialog.sinton;
-        return result;
+        return result / 50.0 * 100.0;
     }
 
     private double sphereLeaderShip(Dialog dialog) {
@@ -143,7 +143,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += dialog.tempo;
         result += dialog.length;
         result += dialog.activity;
-        return result;
+        return result / 25.0 * 100.0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
