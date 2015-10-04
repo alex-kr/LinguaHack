@@ -57,11 +57,17 @@ public class TextStats {
     public Map<Character, Integer> getLettersAmountMap() {
         return lettersAmountMap;
     }
-    
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        return sb.toString();
+        return "TextStats{" +
+                "tempo=" + tempo +
+                ", saturation=" + saturation +
+                ", consistency=" + consistency +
+                ", length=" + length +
+                ", artistry=" + artistry +
+                ", activity=" + activity +
+                '}';
     }
 }
 

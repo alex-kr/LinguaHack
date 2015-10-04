@@ -78,6 +78,12 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private Dialog computeDialog(TextStats t1, TextStats t2) {
+
+        System.out.println(t1);
+        System.out.println();
+        System.out.println(t2);
+        System.out.println();
+
         double tempo = passesTempo(t1.getTempo(), t2.getTempo());
         double saturation = passesSaturation(t1.getSaturation(), t2.getSaturation());
         double length = passesLength(t1.getLength(), t2.getLength());
@@ -89,8 +95,13 @@ public class AlgorithmsBaseImpl implements Algorithm {
         double semantics = passesSemantics(t1.getWordsAmountMap(), t2.getWordsAmountMap());
         double sinton = passesSinton(t1.getLettersAmountMap(), t2.getLettersAmountMap());
 
-        return new Dialog(tempo, saturation, consistency, length,
+        Dialog dialog = new Dialog(tempo, saturation, consistency, length,
                 artistry, activity, synonymy, antonymy, semantics, sinton);
+
+        System.out.println(dialog);
+        System.out.println();
+
+        return dialog;
     }
 
     private double base(Dialog dialog) {
@@ -168,6 +179,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private double passesActivity(double a1, double a2) {
+        System.out.println(ifPassesCriteria(a1, a2, config.criteria(ACTIVITY)) + "  " + a1 + " " + a2);
         return ifPassesCriteria(a1, a2, config.criteria(ACTIVITY)) ? config.weight(ACTIVITY) : 0.0;
     }
 
@@ -243,7 +255,9 @@ public class AlgorithmsBaseImpl implements Algorithm {
                 }
             }
 
-            return (2.0 * straightHits + synonymHits - 2.0 * antonymsHits) / total1;
+            boolean b = (2.0 * straightHits + synonymHits - 2.0 * antonymsHits) > config.criteria(SEMANTICS);
+
+            return config.weight(SEMANTICS);
         } catch (IOException ignored) {
             return 0.0;
         }
@@ -314,23 +328,29 @@ public class AlgorithmsBaseImpl implements Algorithm {
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
-            String word = sample.substring(0, underscore);
-            String part = sample.substring(underscore + 1);
+            String word = sample;
+            String part = "_noun";
+            if (underscore != -1) {
+                word = sample.substring(0, underscore);
+                part = sample.substring(underscore + 1);
+            }
 
 
-            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
-            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
+            IWordID wordID = null; // 1st meaning
+            try {
+                IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
+                wordID = idxWord.getWordIDs().get(0);
+                IWord iWord = dict.getWord(wordID);
+                ISynset synset = iWord.getSynset();
 
-            IWord iWord = dict.getWord(wordID);
-            ISynset synset = iWord.getSynset();
-
-            for (IWord w : synset.getWords()) {
-                synonyms.add(w.getLemma() + "_" + part);
+                for (IWord w : synset.getWords()) {
+                    synonyms.add(w.getLemma() + "_" + part);
+                }
+            } catch (Exception ignored) {
+                // cant do anything
             }
         }
-
         result.addAll(synonyms);
-
         return result;
     }
 
@@ -350,23 +370,26 @@ public class AlgorithmsBaseImpl implements Algorithm {
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
-            String word = sample.substring(0, underscore);
-            String part = sample.substring(underscore + 1);
+            String word = sample;
+            String part = "_noun";
+            if (underscore != -1) {
+                word = sample.substring(0, underscore);
+                part = sample.substring(underscore + 1);
+            }
 
-
-            IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
-
-            IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
-
-            IWord iWord = dict.getWord(wordID);
-
-            Map<IPointer, List<IWordID>> relatedMap = iWord.getRelatedMap();
-
-            for (Entry<IPointer, List<IWordID>> entry : relatedMap.entrySet()) {
-                for (IWordID wordID1 : entry.getValue()) {
-                    IWord iWord1 = dict.getWord(wordID1);
-                    antonyms.add(iWord1.getLemma() + "_" + part);
+            try {
+                IIndexWord idxWord = dict.getIndexWord(word, definePos(part));
+                IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
+                IWord iWord = dict.getWord(wordID);
+                Map<IPointer, List<IWordID>> relatedMap = iWord.getRelatedMap();
+                for (Entry<IPointer, List<IWordID>> entry : relatedMap.entrySet()) {
+                    for (IWordID wordID1 : entry.getValue()) {
+                        IWord iWord1 = dict.getWord(wordID1);
+                        antonyms.add(iWord1.getLemma() + "_" + part);
+                    }
                 }
+            } catch (Exception ignored) {
+                // Can't do anything
             }
         }
 

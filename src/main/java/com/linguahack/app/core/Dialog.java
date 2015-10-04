@@ -13,6 +13,22 @@ public class Dialog {
     public final double sinton;
 
 
+    @Override
+    public String toString() {
+        return "Dialog{" +
+                "tempo=" + tempo +
+                ", saturation=" + saturation +
+                ", consistency=" + consistency +
+                ", length=" + length +
+                ", artistry=" + artistry +
+                ", activity=" + activity +
+                ", synonymy=" + synonymy +
+                ", antonymy=" + antonymy +
+                ", semantics=" + semantics +
+                ", sinton=" + sinton +
+                '}';
+    }
+
     public Dialog(double tempo, double saturation, double consistency,
                   double length, double artistry, double activity, double synonymy,
                   double antonymy, double semantics, double sinton) {
@@ -26,5 +42,7 @@ public class Dialog {
         this.antonymy = antonymy;
         this.semantics = semantics;
         this.sinton = sinton;
+
+
     }
 }
