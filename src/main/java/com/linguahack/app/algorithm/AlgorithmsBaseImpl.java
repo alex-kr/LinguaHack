@@ -78,12 +78,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private Dialog computeDialog(TextStats t1, TextStats t2) {
-
-        System.out.println(t1);
-        System.out.println();
-        System.out.println(t2);
-        System.out.println();
-
         double tempo = passesTempo(t1.getTempo(), t2.getTempo());
         double saturation = passesSaturation(t1.getSaturation(), t2.getSaturation());
         double length = passesLength(t1.getLength(), t2.getLength());
@@ -95,13 +89,8 @@ public class AlgorithmsBaseImpl implements Algorithm {
         double semantics = passesSemantics(t1.getWordsAmountMap(), t2.getWordsAmountMap());
         double sinton = passesSinton(t1.getLettersAmountMap(), t2.getLettersAmountMap());
 
-        Dialog dialog = new Dialog(tempo, saturation, consistency, length,
+        return new Dialog(tempo, saturation, consistency, length,
                 artistry, activity, synonymy, antonymy, semantics, sinton);
-
-        System.out.println(dialog);
-        System.out.println();
-
-        return dialog;
     }
 
     private double base(Dialog dialog) {
@@ -179,7 +168,6 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private double passesActivity(double a1, double a2) {
-        System.out.println(ifPassesCriteria(a1, a2, config.criteria(ACTIVITY)) + "  " + a1 + " " + a2);
         return ifPassesCriteria(a1, a2, config.criteria(ACTIVITY)) ? config.weight(ACTIVITY) : 0.0;
     }
 
@@ -285,12 +273,21 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
         int points = 0;
 
-        for (Character c : preferable1) {
-            // TODO algortihm??
-            if (preferable2.contains(c)) {
-                points++;
-            } else if (ignored2.contains(c)) {
-                points--;
+        for (Character c1 : preferable1) {
+            if (preferable2.contains(c1)) {
+                points += 2;
+            } else {
+                boolean cat = false;
+                if (IDEAL_CAT_1.containsKey(c1)) {
+                    cat = true;
+                }
+                for (Character c2 : preferable2) {
+                    if (IDEAL_CAT_1.containsKey(c2) == cat) {
+                        points++;
+                    } else {
+                        points--;
+                    }
+                }
             }
         }
 
@@ -298,12 +295,21 @@ public class AlgorithmsBaseImpl implements Algorithm {
         result += points > config.criteria(SINTONITY) ? config.weight(SINTONITY) : 0.0;
 
         points = 0;
-        for (Character c : ignored1) {
-            // TODO algortihm??
-            if (ignored2.contains(c)) {
-                points++;
-            } else if (preferable2.contains(c)) {
-                points--;
+        for (Character c1 : ignored1) {
+            if (ignored1.contains(c1)) {
+                points += 2;
+            } else {
+                boolean cat = false;
+                if (IDEAL_CAT_1.containsKey(c1)) {
+                    cat = true;
+                }
+                for (Character c2 : ignored2) {
+                    if (IDEAL_CAT_1.containsKey(c2) == cat) {
+                        points++;
+                    } else {
+                        points--;
+                    }
+                }
             }
         }
 
@@ -414,7 +420,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
     private void splitLetters(Map<Character, Integer> l1, int total1, Set<Character> preferable1, Set<Character> ignored1) {
         for (Entry<Character, Integer> entry : l1.entrySet()) {
-            double percent = (double) entry.getValue() / total1;
+            double percent = (double) entry.getValue() / total1 * 100.0;
 
             if (!IDEAL_CAT_1.containsKey(entry.getKey()) && !IDEAL_CAT_2.containsKey(entry.getKey())) {
                 continue;
@@ -425,12 +431,10 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
             double relative = percent / idealValue;
 
-            if (relative > 1.05) {
+            if (relative >= 1.05) {
                 preferable1.add(entry.getKey());
-            } else if (relative < 0.95) {
+            } else if (relative <= 0.95) {
                 ignored1.add(entry.getKey());
-            } else {
-                // TODO wat? if in mid
             }
         }
     }
