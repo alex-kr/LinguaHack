@@ -64,6 +64,7 @@ public class ParserImplTest {
     @Test
     public void  test_getTokens() {
         String input = "Azaza aaa bbb ooo";
+
         String[] tokens= parser.getTokens(input);
 
         Assert.assertThat("Azaza" , is(tokens[0]));
@@ -74,6 +75,7 @@ public class ParserImplTest {
 
     @Test
     public void  test_getTags() {
+
         String[] tokens= new String[]{"Most", "large", "cities", "in", "the", "US", "had",
                                       "morning", "and", "afternoon", "newspapers", "."};	;
 
@@ -83,14 +85,19 @@ public class ParserImplTest {
         Assert.assertThat("JJ" , is(tags[1]));
         Assert.assertThat("NNS" , is(tags[2]));
         Assert.assertThat("IN" , is(tags[3]));
-        Assert.assertThat("aaa" , is(tags[4]));
-        Assert.assertThat("aaa" , is(tags[5]));
-        Assert.assertThat("aaa" , is(tags[6]));
-        Assert.assertThat("aaa" , is(tags[7]));
-        Assert.assertThat("aaa" , is(tags[8]));
-        Assert.assertThat("aaa" , is(tags[9]));
-        Assert.assertThat("aaa" , is(tags[10]));
-        Assert.assertThat("aaa" , is(tags[11]));
+        Assert.assertThat("DT" , is(tags[4]));
+        Assert.assertThat("NNP" , is(tags[5]));
+        Assert.assertThat("VBD" , is(tags[6]));
+
+
+    }
+
+    @Test
+    public void  test_calcSaturation() {
+        String input = "She cannot find their beach at towels? " +
+                "Donna always loses things. ";
+
+        Assert.assertThat(5.0 , is(parser.calcSaturation(input)));
     }
 
 }
