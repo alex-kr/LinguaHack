@@ -1,8 +1,18 @@
 package com.linguahack.app.parser;
 
 import com.linguahack.app.core.TextStats;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
 
+import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ParserImpl implements Parser {
@@ -21,9 +31,129 @@ public class ParserImpl implements Parser {
     }
 
 
-    private String getParsedString() {
-        return "";
+    public List<String> getSentences(String inputText) {
+        InputStream modelIn = null;
+        SentenceModel model = null;
+
+        try {
+            modelIn = new FileInputStream("src/resources/da-sent.bin");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            model = new SentenceModel(modelIn);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (modelIn != null) {
+                try {
+                    modelIn.close();
+                }
+                catch (IOException e) {
+                }
+            }
+        }
+
+        SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
+
+        String sentences[] = sentenceDetector.sentDetect(inputText);
+
+        return Arrays.asList(sentences);
     }
+
+    public String[] getTokens(String inputText) {
+
+        InputStream modelIn = null;
+        TokenizerModel model = null;
+        Tokenizer tokenizer;
+
+        try {
+            modelIn = new FileInputStream("src/resources/en-token.bin");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            model = new TokenizerModel(modelIn);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (modelIn != null) {
+                try {
+                    modelIn.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        tokenizer = new TokenizerME(model);
+
+        return tokenizer.tokenize(inputText);
+    }
+
+
+    public String[] getTags(String[] tokens) {
+        InputStream modelIn = null;
+        POSModel model = null;
+
+        try {
+            modelIn = new FileInputStream("src/resources/en-pos-maxent.bin");
+            model = new POSModel(modelIn);
+        }
+        catch (IOException e) {
+            // Model loading failed, handle the error
+            e.printStackTrace();
+        }
+        finally {
+            if (modelIn != null) {
+                try {
+                    modelIn.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        POSTaggerME tagger = new POSTaggerME(model);
+
+        return tagger.tag(tokens);
+    }
+
+  /*  public String getProcessedSentence(String inputText) {
+        InputStream modelIn = null;
+        POSModel model = null;
+
+        try {
+            modelIn = new FileInputStream("src/resources/en-pos-maxent.bin");
+            model = new POSModel(modelIn);
+        }
+        catch (IOException e) {
+            // Model loading failed, handle the error
+            e.printStackTrace();
+        }
+        finally {
+            if (modelIn != null) {
+                try {
+                    modelIn.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        POSTaggerME tagger = new POSTaggerME(model);
+
+        return null;
+    }*/
 
     public double calcTempo(String inputText, long timestamp) {
         int charCount = 0;
