@@ -251,7 +251,7 @@ public class ParserImpl implements Parser {
 
         for (int i = 0; i < length; i++) {
             if (tags[i] != "") {
-                tmpWord = tokens[i] + tags[i];
+                tmpWord = tokens[i] + POSHelper.getPartOfSpeech(tags[i]);
                 if (result.containsKey(tmpWord)) {
                     result.put(tmpWord, result.get(tmpWord) + 1);
                 } else {
