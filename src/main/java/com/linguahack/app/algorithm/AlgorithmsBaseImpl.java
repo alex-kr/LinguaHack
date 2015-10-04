@@ -67,7 +67,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
     @Override
     public Map<String, Double> process(TextStats t1, TextStats t2) {
-        Map<String, Double> result = new HashMap<>();
+        Map<String, Double> result = new HashMap<String, Double>();
         Dialog dialog = computeDialog(t1, t2);
         result.put("base", base(dialog));
         result.put("development", sphereDevelopment(dialog));
@@ -260,13 +260,13 @@ public class AlgorithmsBaseImpl implements Algorithm {
             total2 += entry.getValue();
         }
 
-        Set<Character> preferable1 = new HashSet<>();
-        Set<Character> ignored1 = new HashSet<>();
+        Set<Character> preferable1 = new HashSet<Character>();
+        Set<Character> ignored1 = new HashSet<Character>();
         splitLetters(l1, total1, preferable1, ignored1);
 
 
-        Set<Character> preferable2 = new HashSet<>();
-        Set<Character> ignored2 = new HashSet<>();
+        Set<Character> preferable2 = new HashSet<Character>();
+        Set<Character> ignored2 = new HashSet<Character>();
         splitLetters(l2, total2, preferable2, ignored2);
 
         int points = 0;
@@ -299,7 +299,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private Set<String> preprocessSynonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<>();
+        Set<String> result = new HashSet<String>();
         for (Entry<String, Integer> entry : w1.entrySet()) {
             if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
                 result.add(entry.getKey());
@@ -310,7 +310,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
-        Set<String> synonyms = new HashSet<>();
+        Set<String> synonyms = new HashSet<String>();
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
@@ -335,7 +335,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     private Set<String> preProcessAntonyms(Map<String, Integer> w1) throws IOException {
-        Set<String> result = new HashSet<>();
+        Set<String> result = new HashSet<String>();
         for (Entry<String, Integer> entry : w1.entrySet()) {
             if (entry.getValue() >= config.getMinRequiredWordsQuantity()) {
                 result.add(entry.getKey());
@@ -346,7 +346,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
-        Set<String> antonyms = new HashSet<>();
+        Set<String> antonyms = new HashSet<String>();
         for (String sample : result) {
 
             int underscore = sample.indexOf('_');
