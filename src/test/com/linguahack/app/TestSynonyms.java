@@ -1,4 +1,4 @@
-package java.com.linguahack.app;
+package com.linguahack.app;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;

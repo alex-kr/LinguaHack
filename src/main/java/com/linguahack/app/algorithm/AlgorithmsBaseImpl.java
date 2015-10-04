@@ -306,7 +306,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
             }
         }
         // spreading with synonyms
-        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
+        URL wordNetPath = new URL("file", null, "src/resources/dict");
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
@@ -342,7 +342,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
             }
         }
 
-        URL wordNetPath = new URL("file", null, "/usr/local/WordNet-3.0/dict");
+        URL wordNetPath = new URL("file", null, "src/resources/dict");
         IDictionary dict = new Dictionary(wordNetPath);
         dict.open();
 
