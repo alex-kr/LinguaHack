@@ -188,7 +188,7 @@ public class ParserImpl implements Parser {
         }
 
         if (sentAmount != 0) {
-            result = counOfminingfulWords/sentAmount;
+            result = (double)counOfminingfulWords/sentAmount;
         } else {
             return 0.0;
         }
@@ -214,7 +214,7 @@ public class ParserImpl implements Parser {
         }
 
         if (overalWordsNumber != 0) {
-            result = wordsCounter/overalWordsNumber;
+            result = (double)wordsCounter/overalWordsNumber;
         } else {
             result = 0.0;
         }
