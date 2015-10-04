@@ -1,4 +1,4 @@
-package java.com.linguahack.app;
+package com.linguahack.app.algorithm;
 
 import com.linguahack.app.algorithm.Algorithm;
 import com.linguahack.app.algorithm.AlgorithmsBaseImpl;
