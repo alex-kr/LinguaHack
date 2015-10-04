@@ -24,7 +24,7 @@ public class ParserImpl implements Parser {
     }
 
 
-    public TextStats parse(String inputText, Long timestamp) {
+    public TextStats parse(String inputText, long timestamp) {
 
         Holder holder = new Holder();
         holder.tokens = getTokens(inputText);
@@ -141,7 +141,7 @@ public class ParserImpl implements Parser {
 
 
 
-    public double calcTempo(String inputText, Long timestamp) {
+    public double calcTempo(String inputText, long timestamp) {
         int charCount = 0;
         int charCode;
         double result;
