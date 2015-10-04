@@ -21,14 +21,16 @@ public class ParserImpl implements Parser {
     public TextStats parse(String inputText, long timestamp) {
 
         return new TextStats(calcTempo(inputText, timestamp),
-                calcSaturation(inputText),
-                calcLength(inputText),
-                calcArtistry(inputText),
-                calcActivity(inputText),
-                getWordsAmountMap(inputText),
-                getLettersAmountMap(inputText)
+                             calcSaturation(inputText),
+                             calcConsistency(inputText),
+                             calcLength(inputText),
+                             calcArtistry(inputText),
+                             calcActivity(inputText),
+                             getWordsAmountMap(inputText),
+                             getLettersAmountMap(inputText)
         );
     }
+
 
 
     public List<String> getSentences(String inputText) {
@@ -213,6 +215,10 @@ public class ParserImpl implements Parser {
         }
 
         return map;
+    }
+
+    public double calcConsistency(String inputText) {
+        return 0;
     }
 
 
