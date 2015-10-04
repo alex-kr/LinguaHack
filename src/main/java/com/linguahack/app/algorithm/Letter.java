@@ -1,11 +1,12 @@
 package com.linguahack.app.algorithm;
 
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Letter {
-    public static final Map<Character, Double> IDEAL_CAT_1 = new HashMap<>();
-    public static final Map<Character, Double> IDEAL_CAT_2 = new HashMap<>();
+    public static final Map<Character, Double> IDEAL_CAT_1 = new HashMap<Character, Double>();
+    public static final Map<Character, Double> IDEAL_CAT_2 = new HashMap<Character, Double>();
 
     static {
         IDEAL_CAT_1.put('b', 1.49);

@@ -33,7 +33,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
     }
 
     static class Config {
-        private final Map<Parameters, ParameterInfo> param2info = new HashMap<>();
+        private final Map<Parameters, ParameterInfo> param2info = new HashMap<Parameters, ParameterInfo>();
         private int minRequiredWordsQuantity = 3;
 
         public int getMinRequiredWordsQuantity() {
@@ -177,7 +177,7 @@ public class AlgorithmsBaseImpl implements Algorithm {
         }
         try {
             Set<String> words1 = preprocessSynonyms(w1);
-            Set<String> words2 = new HashSet<>();
+            Set<String> words2 = new HashSet<String>();
             for (Entry<String, Integer> entry : w2.entrySet()) {
                 if (entry.getValue() > config.getMinRequiredWordsQuantity()) {
                     words2.add(entry.getKey());
