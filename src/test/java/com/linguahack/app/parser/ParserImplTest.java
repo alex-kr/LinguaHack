@@ -94,8 +94,8 @@ public class ParserImplTest {
 
     @Test
     public void  test_calcSaturation() {
-        String input = "She cannot find their beach at towels? " +
-                "Donna always loses things. ";
+        String input = "she cannot find their beach at towels. " +
+                "donna always loses things.";
 
         Assert.assertThat(5.0 , is(parser.calcSaturation(input)));
     }

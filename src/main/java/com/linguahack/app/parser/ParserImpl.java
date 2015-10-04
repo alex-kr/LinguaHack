@@ -18,16 +18,25 @@ import java.util.Map;
 
 public class ParserImpl implements Parser {
 
+    private class Holder {
+        String[] tokens;
+        String[] tags;
+    }
+
 
     public TextStats parse(String inputText, long timestamp) {
+
+        Holder holder = new Holder();
+        holder.tokens = getTokens(inputText);
+        holder.tags   = getTags(holder.tokens);
 
         return new TextStats(calcTempo(inputText, timestamp),
                              calcSaturation(inputText),
                              calcConsistency(inputText),
                              calcLength(inputText),
-                             calcArtistry(inputText),
-                             calcActivity(inputText),
-                             getWordsAmountMap(inputText),
+                             calcArtistry(holder),
+                             calcActivity(holder),
+                             getWordsAmountMap(holder),
                              getLettersAmountMap(inputText)
         );
     }
@@ -137,6 +146,7 @@ public class ParserImpl implements Parser {
         int charCode;
         double result;
 
+
         for (int i = 0; i < inputText.length(); i++) {
             charCode = (int) inputText.charAt(i);
 
@@ -154,6 +164,14 @@ public class ParserImpl implements Parser {
     }
 
     public double calcSaturation(String inputText) {
+        int wordsAmount = calcLength(inputText);
+        int sentencesAmount = inputText.split("[.]").length;
+
+        return wordsAmount/sentencesAmount;
+
+    }
+
+    public double calcConsistency(String inputText) {
         List<String> sentences = getSentences(inputText);
         int sentAmount = sentences.size();
         int counOfminingfulWords = 0;
@@ -181,15 +199,16 @@ public class ParserImpl implements Parser {
         return inputText.split("[^a-z]+").length;
     }
 
-    public double calcArtistry(String inputText) {
-        String[] tokens = getTokens(inputText);
+    public double calcArtistry(Holder holder) {
+        String[] tokens = holder.tokens;
+        String[] tags = holder.tags;
         int overalWordsNumber = tokens.length;
         int wordsCounter = 0;
         double result;
 
         for (int i =0; i < overalWordsNumber; i++) {
-            if ((POSHelper.getPartOfSpeech(tokens[i]) == "_adjective") ||
-                (POSHelper.getPartOfSpeech(tokens[i]) == "_adverb"   )) {
+            if ((POSHelper.getPartOfSpeech(tags[i]) == "_adjective") ||
+                (POSHelper.getPartOfSpeech(tags[i]) == "_adverb"   )) {
                 wordsCounter++;
             }
         }
@@ -202,14 +221,15 @@ public class ParserImpl implements Parser {
         return result;
     }
 
-    public double calcActivity(String inputText) {
-        String[] tokens = getTokens(inputText);
+    public double calcActivity(Holder holder) {
+        String[] tokens = holder.tokens;
+        String[] tags = holder.tags;
         int overalWordsNumber = tokens.length;
         int wordsCounter = 0;
         double result;
 
-        for (int i =0; i < overalWordsNumber; i++) {
-            if (POSHelper.getPartOfSpeech(tokens[i]) == "_verb") {
+        for (int i = 0; i < overalWordsNumber; i++) {
+            if (POSHelper.getPartOfSpeech(tags[i]) == "_verb") {
                 wordsCounter++;
             }
         }
@@ -222,8 +242,25 @@ public class ParserImpl implements Parser {
         return result;
     }
 
-    public Map<String, Integer> getWordsAmountMap(String inputText) {
-        return new HashMap<String, Integer>();
+    public Map<String, Integer> getWordsAmountMap(Holder holder) {
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        String[] tokens = holder.tokens;
+        String[] tags = holder.tags;
+        int length = tokens.length;
+        String tmpWord;
+
+        for (int i = 0; i < length; i++) {
+            if (tags[i] != "") {
+                tmpWord = tokens[i] + tags[i];
+                if (result.containsKey(tmpWord)) {
+                    result.put(tmpWord, result.get(tmpWord) + 1);
+                } else {
+                    result.put(tmpWord, 1);
+                }
+            }
+        }
+
+        return result;
     }
 
     public Map<Character, Integer> getLettersAmountMap(String inputText) {
@@ -245,7 +282,7 @@ public class ParserImpl implements Parser {
         return map;
     }
 
-    public double calcConsistency(String inputText) {
+    /*public double calcConsistency(String inputText) {
         String[] tokens = getTokens(inputText);
         int overalWordsNumber = tokens.length;
         int wordsCounter = 0;
@@ -263,7 +300,7 @@ public class ParserImpl implements Parser {
             result = 0.0;
         }
         return result;
-    }
+    }*/
 
 
 }
